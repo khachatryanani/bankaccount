@@ -3,13 +3,12 @@
 #include <fstream>
 #include <string>
 #include <iomanip>
+#include "Application.h"
 using namespace std;
 using json = nlohmann::json;
 
-class Application 
-{
-public:
-	string GetUserInput()
+
+	string Application::GetUserInput()
 	{
 		string userInput;
 		string consoleGarbage;
@@ -17,7 +16,7 @@ public:
 		getline(cin, userInput);
 		return userInput;
 	}
-	json GetAndReturnUserInfo() 
+	json Application::GetAndReturnUserInfo()
 	{
 		cout << "You want to create a new account.\nPlease, enter your personal info.\n";
 		string fName, lName, password, address, amount;
@@ -45,28 +44,28 @@ public:
 		};
 		return newUser;
 	}
-	char GetUserChoice()
+	char Application::GetUserChoice()
 	{
 		cout << "1. Create new account\n2. Update info on existing account\n3. Perform a transaction\n4. Check the details of existing account\n5. Remove existing account\n6. See the customers list\n7. Exit\n";
 		char userChoice;
 		cin >> userChoice;
 		return userChoice;
 	}
-	void ReturnToMenu()
+	void Application::ReturnToMenu()
 	{
 		string key;
 		cout << "Press any key to return back to the main menu!";
 		getline(cin, key);
 	}
-	void PressToContinue()
+	void Application::PressToContinue()
 	{
 		string key;
 		cout << "Press any key to continue!";
 		getline(cin, key);
 	}
-	void CollectConsoleGarbage() 
+	void Application::CollectConsoleGarbage()
 	{
 		string consoleGarbage;
 		getline(cin, consoleGarbage);
 	}
-};
+

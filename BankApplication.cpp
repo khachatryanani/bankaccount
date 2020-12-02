@@ -1,8 +1,7 @@
 #include <fstream>
 #include <iostream>
-#include <string>
 #include <iomanip>
-#include "Banking.cpp"
+#include "Banking.h"
 
 using namespace std;
 

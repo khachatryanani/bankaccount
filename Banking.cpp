@@ -1,6 +1,5 @@
 #include "json.hpp"
-#include "BankAccount.cpp"
-#include "Application.cpp"
+#include "Banking.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -9,22 +8,19 @@
 using namespace std;
 using json = nlohmann::json;
 
-class Bank:public Application
-{
-public:
-	Bank()
+Bank::Bank()
 	{
 		CreateBankInfo();
 		CreateBankDB();
 	};
-	~Bank(){}
-	void UserToCreateAccount()
+Bank::~Bank(){}
+void Bank::UserToCreateAccount()
 	{
 		BankAccount bkAccount = CreateBankAccount(GetAndReturnUserInfo());
 		CollectConsoleGarbage();
 		ReturnToMenu();
 	}
-	void UserToRemoveAccount() 
+void Bank::UserToRemoveAccount()
 	{
 		json CustomerFromDB = FindCustomer();
 		BankAccount bkAccount = BankAccount(CustomerFromDB[0]);
@@ -46,7 +42,7 @@ public:
 		ReturnToMenu();
 		ArchiveBank();
 	}
-	void UserToPerformTransaction() 
+void Bank::UserToPerformTransaction()
 	{
 		json CustomerFromDB = FindCustomer();
 		BankAccount bkAccount = BankAccount(CustomerFromDB[0]);
@@ -80,7 +76,7 @@ public:
 		UpdateCustomerAccountInDB(CustomerFromDB);
 		//ReturnToMenu();
 	}
-	void UserToCheckAccountInfo() 
+void Bank::UserToCheckAccountInfo()
 	{
 		BankAccount bkAccount = BankAccount(FindCustomer()[0]);
 		system("cls");
@@ -89,7 +85,7 @@ public:
 		CollectConsoleGarbage();
 		ReturnToMenu();
 	}
-	void UserToUpdateAccountInfo() 
+void Bank::UserToUpdateAccountInfo()
 	{
 		json CustomerFromDB = FindCustomer();
 		BankAccount bkAccount = BankAccount(CustomerFromDB[0]);
@@ -124,7 +120,7 @@ public:
 		CollectConsoleGarbage();
 		//ReturnToMenu();
 	}
-	void UserToSeeCustomersList() 
+void Bank::UserToSeeCustomersList()
 	{
 		cout << "See below the list of current customers:\n";
 		bool shown = false;
@@ -143,8 +139,7 @@ public:
 		CollectConsoleGarbage();
 		ReturnToMenu();
 	}
-private:
-	BankAccount CreateBankAccount(json newUser)
+BankAccount Bank::CreateBankAccount(json newUser)
 	{
 		BankAccount bkAccount = BankAccount(newUser);
 		cout << "New Account is created with the following data:\n";
@@ -153,7 +148,7 @@ private:
 		AddCustomerAccountToDB(bkAccount.GetCustomerJSON());
 		return bkAccount;
 	}
-	json GetCustomerAccount(string fName, string lName, string password)
+json Bank::GetCustomerAccount(string fName, string lName, string password)
 	{
 		bool found = false;
 		for (unsigned int i = 0; i < _bankDB["customers"].size(); i++)
@@ -171,7 +166,7 @@ private:
 			cout << "Not found:";
 		}
 	}
-	void UpdateCustomerAccountInDB(json account)
+void Bank::UpdateCustomerAccountInDB(json account)
 	{
 		for (unsigned int i = 0; i < _bankDB["customers"].size(); i++)
 		{
@@ -182,14 +177,14 @@ private:
 		}
 		ArchiveBank();
 	}
-	void AddCustomerAccountToDB(json j)
+void Bank::AddCustomerAccountToDB(json j)
 	{
 		json customerID;
 		customerID["customer ID"] = customerIDGenerator(customerIDs);
 		_bankDB["customers"].push_back({ j, customerID });
 		ArchiveBank();
 	}
-	void ArchiveBank()
+void Bank::ArchiveBank()
 	{
 		ofstream bankDB("bankDB.txt");
 		bankDB << _bankDB.dump(4);
@@ -200,7 +195,7 @@ private:
 		bankInfo << bnkInfo;
 		bankInfo.close();
 	}
-	json FindCustomer()
+json Bank::FindCustomer()
 	{
 		cout << "Please, enter your credentials.\n";
 		CollectConsoleGarbage();
@@ -214,7 +209,7 @@ private:
 		cin >> password;
 		return GetCustomerAccount(fName, lName, password);
 	}
-	void CreateBankDB()
+void Bank::CreateBankDB()
 	{
 		ifstream bankDB("bankDB.txt");
 		if (bankDB.is_open())
@@ -230,7 +225,7 @@ private:
 			bankDB.close();
 		}
 	}
-	void CreateBankInfo()
+void Bank::CreateBankInfo()
 	{
 		ifstream bankInfo("bankInfo.txt");
 		if (bankInfo.is_open())
@@ -249,7 +244,7 @@ private:
 			bankInfo.close();
 		}
 	}
-	string customerIDGenerator(int count)
+string Bank::customerIDGenerator(int count)
 	{
 		int i = 8;
 		string ID = to_string(count);
@@ -259,7 +254,6 @@ private:
 		}
 		return ID;
 	}
-	int customerIDs=0;
-	json _bankDB;
-};
+	
+
 

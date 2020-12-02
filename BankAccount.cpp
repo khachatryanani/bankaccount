@@ -1,4 +1,5 @@
 #include "json.hpp"
+#include "BankAccount.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -6,31 +7,27 @@
 using namespace std;
 using json = nlohmann::json;
 
-
-class BankAccount
-{
-public:
-	BankAccount(){};
-	BankAccount(json &outerJSON)
+BankAccount::BankAccount(){};
+BankAccount::BankAccount(json &outerJSON)
 	{
 		customerJ = outerJSON;
 	}
-	void AddAmount()
+void BankAccount::AddAmount()
 	{
 		string add;
 		cout << "Type in the amount you want to add to your account: ";
 		cin >> add;
-		customerJ["current amount"] = customerJ["current amount"].get<double>() + stod(add);
+		customerJ["current amount"] = customerJ["current amount"] + stod(add);
 		cout << "Transaction completed successfully!\nCurrent amount = "<< customerJ["current amount"]<<endl;
 	}
-	void WithdrawAmount()
+void BankAccount::WithdrawAmount()
 	{
 		string withdraw;
 		cout << "Type in the amount you want to withdraw from your account: ";
 		cin >> withdraw;
 		if (stod(withdraw) <  customerJ["current amount"])
 		{
-			customerJ["current amount"] = customerJ["current amount"].get<double>() - stod(withdraw);
+			customerJ["current amount"] = customerJ["current amount"] - stod(withdraw);
 			cout << "Transaction completed successfully!\nCurrent amount = " << customerJ["current amount"] << endl;
 		}
 		else
@@ -38,17 +35,17 @@ public:
 			cout << "Unable to complete the transaction: no enough amount\n";
 		}
 	}
-	void CheckCurrentAmount()
+void BankAccount::CheckCurrentAmount()
 	{
 		cout << "The current amount of your account: " << customerJ["current amount"] << endl;
 	}
-	void DisplayAccountInfo() 
+void BankAccount::DisplayAccountInfo()
 	{
 		cout << "Full Name: " << customerJ["first name"].get<string>()<< " "<<customerJ["last name"].get<string>() << endl;
 		cout << "Address: " << customerJ["customer address"].get<string>() << endl;
 		cout << "Current amount available to dispose: $" << customerJ["current amount"] << endl;
 	}
-	void UpdateAccountInfo( char userChoice, string UserUpdate) 
+void BankAccount::UpdateAccountInfo( char userChoice, string UserUpdate)
 	{
 			switch (userChoice)
 			{
@@ -67,12 +64,10 @@ public:
 			cout << "Data successfully updated!\n";
 			DisplayAccountInfo();
 	}
-	json GetCustomerJSON()
+json BankAccount::GetCustomerJSON()
 	{
 		return customerJ;
 	}
-private:
-	json customerJ;
-};
+
 
 
